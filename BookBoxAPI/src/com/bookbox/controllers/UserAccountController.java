@@ -22,6 +22,7 @@ import com.bookbox.services.UserAccountService;
 
 @Controller
 @RequestMapping("/users")
+@CrossOrigin(origins = {"http://127.0.0.1:8989"}, maxAge=4800)
 public class UserAccountController {
 	@Autowired
     private	UserAccountService userService;
@@ -42,7 +43,7 @@ public class UserAccountController {
     		return new ResponseEntity<String>(FAILURE,HttpStatus.BAD_REQUEST);
     	}
 	}
-    @CrossOrigin(origins = "http://127.0.0.1:8989")
+   
     @RequestMapping(value="/anonymous", method=RequestMethod.GET)
     public ResponseEntity<UserInfo> getDetailsForAnonymousLogin(){
     	UserInfo userInfo=userService.getUserInfoForAnonymousLogin();

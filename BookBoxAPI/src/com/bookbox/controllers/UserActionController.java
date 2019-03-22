@@ -21,6 +21,7 @@ import com.bookbox.services.UserActionService;
 
 @Controller
 @RequestMapping("/actions")
+@CrossOrigin(origins = {"http://127.0.0.1:8989"}, maxAge=4800)
 public class UserActionController {
     @Autowired
 	private UserActionService actionService;
@@ -107,7 +108,7 @@ public class UserActionController {
     	}
     	return new ResponseEntity<String>(INPUT_MISSING,HttpStatus.BAD_REQUEST);
     }
-    @CrossOrigin(origins = "http://127.0.0.1:8989")
+    
     @RequestMapping(value="/search/{key}/{type}", method=RequestMethod.GET)
     public ResponseEntity<List<Book>> searchAllBooks(@PathVariable("key") String key, @PathVariable("type") String searchType){
     	return new ResponseEntity<List<Book>>(actionService.searchAllBooks(key, searchType), HttpStatus.OK);
