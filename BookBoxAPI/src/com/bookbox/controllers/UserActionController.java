@@ -21,7 +21,7 @@ import com.bookbox.services.UserActionService;
 
 @Controller
 @RequestMapping("/actions")
-@CrossOrigin(origins = {"http://127.0.0.1:8989"}, maxAge=4800)
+@CrossOrigin(origins = {"http://127.0.0.1:8989","http://127.0.0.1","http://localhost"}, maxAge=4800)
 public class UserActionController {
     @Autowired
 	private UserActionService actionService;
