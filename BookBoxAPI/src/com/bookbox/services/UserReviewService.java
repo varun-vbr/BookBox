@@ -24,6 +24,10 @@ public class UserReviewService {
     		return ratings;
     }
     
+    public int getReviewCount(int bookId) {
+    	return getReviewsForaBook(bookId).size();
+    }
+    
     private int recalculateAvgRating(int bookId) {
     	List<UserRating> ratings=this.getReviewsForaBook(bookId);
     	if(ratings.size()>0) {

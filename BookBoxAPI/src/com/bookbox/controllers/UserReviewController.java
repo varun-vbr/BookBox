@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.bookbox.services.UserReviewService;
 
 @Controller
 @RequestMapping("/review")
+@CrossOrigin(origins = {"http://127.0.0.1:8989","http://127.0.0.1","http://localhost"}, maxAge=4800)
 public class UserReviewController {
 	
 	@Autowired
@@ -29,6 +31,13 @@ public class UserReviewController {
 		List<UserRating> ratings=reviewService.getReviewsForaBook(bookId);
 		return new ResponseEntity<List<UserRating>>(ratings,HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/reviewCount/{bookId}", method=RequestMethod.GET)
+	public ResponseEntity<Integer> getBookReviewCount(@PathVariable("bookId")int bookId){
+		int count=reviewService.getReviewCount(bookId);
+		return new ResponseEntity<Integer>(count,HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/createReview", method=RequestMethod.POST)
 	public ResponseEntity<String> addUserRating(@RequestBody Map<String,Object> review){
 		boolean success=reviewService.createUserRating(review);
