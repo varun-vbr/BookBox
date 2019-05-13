@@ -935,3 +935,9 @@ WHERE u.authority='USER' AND b.paymentstatus='DUE' AND b.billdue=1 AND CURRENT_T
 END$$
 
 DELIMITER ;
+
+ALTER TABLE `bookbox`.`tbl_userratings` 
+ADD COLUMN `reviewdate` VARCHAR(45) NULL AFTER `reviewcomment`;
+
+UPDATE `bookbox`.`tbl_userratings` SET `reviewdate`='June 11, 2018' WHERE `id`='1';
+UPDATE `bookbox`.`tbl_userratings` SET `reviewdate`='November 11, 2017' WHERE `id`='2';

@@ -1,5 +1,8 @@
 package com.bookbox.repositories;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +32,8 @@ public class UserReviewDao {
 		if(review.containsKey("userId") && review.containsKey("bookId") && review.containsKey("rating") && review.containsKey("comment")) {
 		Session session=sessionFactory.getCurrentSession();
 		session.beginTransaction();
+		SimpleDateFormat sdf = new SimpleDateFormat("MMMMM dd, YYYY");
+		String reviewDate = sdf.format(new Date()).toString();
 		User user=(User)session.createQuery("from User u where u.userId=:id").setInteger("id", (int) review.get("userId")).uniqueResult();
 		Book book=(Book)session.createQuery("from Book b where b.bookId=:bookId").setInteger("bookId", (int) review.get("bookId")).uniqueResult();
 		if(user!=null && book!=null) {
@@ -37,6 +42,7 @@ public class UserReviewDao {
 		userRating.setUser(user);
 		userRating.setRating((int) review.get("rating"));
 		userRating.setReviewComment((String) review.get("comment"));
+		userRating.setReviewDate(reviewDate);
 		session.save(userRating);
 		session.getTransaction().commit();
 		return true;

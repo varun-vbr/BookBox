@@ -16,6 +16,7 @@ private User user;
 private Book book;
 private int rating;
 private String reviewComment;
+private String reviewDate;
 
 @Id
 @GeneratedValue
@@ -55,5 +56,12 @@ public String getReviewComment() {
 }
 public void setReviewComment(String reviewComment) {
 	this.reviewComment = reviewComment;
+}
+@Column(name="reviewdate")
+public String getReviewDate() {
+	return reviewDate;
+}
+public void setReviewDate(String reviewDate) {
+	this.reviewDate = reviewDate;
 }
 }
