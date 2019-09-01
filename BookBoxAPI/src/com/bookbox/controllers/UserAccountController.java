@@ -1,5 +1,6 @@
 package com.bookbox.controllers;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +51,17 @@ public class UserAccountController {
     	return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
     }
     @RequestMapping(value="/create", method=RequestMethod.POST)
-    public ResponseEntity<String> createNewUser(@RequestBody Map<String, Object> userDetails){
+    public ResponseEntity<Map<String, String>> createNewUser(@RequestBody Map<String, Object> userDetails){
     	boolean success=userService.addUser(userDetails);
     	if(success) {
-    		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
     	}
     	else {
-    		return new ResponseEntity<String>(FAILURE, HttpStatus.BAD_REQUEST);
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     	}
     }
     @RequestMapping(value="/update", method=RequestMethod.PUT)
@@ -70,20 +75,28 @@ public class UserAccountController {
     	}
     }
     @ExceptionHandler(UserNotFoundException.class) 
-    public ResponseEntity<String> handleUserNotFound(){
-    	return new ResponseEntity<String>(USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    public ResponseEntity<Map<String, String>> handleUserNotFound(){
+    	Map<String, String> response = new HashMap<String, String>();
+    	response.put("errorMsg", USER_NOT_FOUND);
+    	return new ResponseEntity<Map<String, String>>(response, HttpStatus.NOT_FOUND);
     	}
     @ExceptionHandler(IllegalLoginException.class)
-    public ResponseEntity<String> handleIllegalLogin(){
-    	return new ResponseEntity<String>(ILLEGAL_LOGIN, HttpStatus.FORBIDDEN);
+    public ResponseEntity<Map<String, String>> handleIllegalLogin(){
+    	Map<String, String> response = new HashMap<String, String>();
+    	response.put("errorMsg", ILLEGAL_LOGIN);
+    	return new ResponseEntity<Map<String, String>>(response, HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(IllegalAccessException.class)
-    public ResponseEntity<String> handleIllegalAccess(){
-    	return new ResponseEntity<String>(ILLEGAL_ACCESS, HttpStatus.FORBIDDEN);
+    public ResponseEntity<Map<String, String>> handleIllegalAccess(){
+    	Map<String, String> response = new HashMap<String, String>();
+    	response.put("errorMsg", ILLEGAL_ACCESS);
+    	return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
     }
     @ExceptionHandler(DuplicateUserCreationException.class)
-    public ResponseEntity<String> handleDuplicateUserCreation(){
-    	return new ResponseEntity<String>(USER_EXISTS, HttpStatus.FORBIDDEN);
+    public ResponseEntity<Map<String, String>> handleDuplicateUserCreation(){
+    	Map<String, String> response = new HashMap<String, String>();
+    	response.put("errorMsg", USER_EXISTS);
+    	return new ResponseEntity<Map<String, String>>(response, HttpStatus.FORBIDDEN);
     }
     
     
