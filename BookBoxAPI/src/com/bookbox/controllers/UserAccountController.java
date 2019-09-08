@@ -23,7 +23,7 @@ import com.bookbox.services.UserAccountService;
 
 @Controller
 @RequestMapping("/users")
-@CrossOrigin(origins = {"http://127.0.0.1:8989","http://127.0.0.1","http://localhost"}, maxAge=4800)
+@CrossOrigin(origins = {"http://127.0.0.1:8989","http://127.0.0.1","http://localhost", "http://localhost:8125"}, maxAge=4800)
 public class UserAccountController {
 	@Autowired
     private	UserAccountService userService;

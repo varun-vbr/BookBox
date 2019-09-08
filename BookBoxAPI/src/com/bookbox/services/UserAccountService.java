@@ -139,7 +139,7 @@ public class UserAccountService {
     	TreeSet<Map.Entry<Integer,Integer>> sortedEntries=(TreeSet<Map.Entry<Integer,Integer>>)this.sortCategoriesByCount(categoryMap);
     	if(sortedEntries.size()>0) {
     		Iterator<Map.Entry<Integer,Integer>> categoryIterator=sortedEntries.iterator();
-    		int count=5;
+    		int count=15;
     		while(categoryIterator.hasNext() && count>0) {
     			Integer categoryId=categoryIterator.next().getKey();
     			readingTrendByUser.addAll(userDao.getPopularBooksForCategory(categoryId, 3));
