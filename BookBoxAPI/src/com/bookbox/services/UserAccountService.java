@@ -142,7 +142,7 @@ public class UserAccountService {
     		int count=15;
     		while(categoryIterator.hasNext() && count>0) {
     			Integer categoryId=categoryIterator.next().getKey();
-    			readingTrendByUser.addAll(userDao.getPopularBooksForCategory(categoryId, 3));
+    			readingTrendByUser.addAll(userDao.getPopularBooksForCategory(categoryId, 7));
     			count--;
     		}
     	}
