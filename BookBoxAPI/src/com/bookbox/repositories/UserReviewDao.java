@@ -22,10 +22,11 @@ public class UserReviewDao {
 	@Qualifier("sessionFactory")
 	private SessionFactory sessionFactory;
 	
+	@SuppressWarnings("unchecked")
 	public List<UserRating> getReviewsForaBook(int bookId){
 		Session session=sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		return session.createQuery("from UserRating ur where ur.book.bookId=:id").setInteger("id", bookId).list();
+		return (List<UserRating>)session.createQuery("from UserRating ur where ur.book.bookId=:id").setInteger("id", bookId).list();
 	} 
 	
 	public boolean addReview(Map<String, Object> review) {

@@ -1,5 +1,6 @@
 package com.bookbox.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +40,19 @@ public class UserReviewController {
 	}
 	
 	@RequestMapping(value="/createReview", method=RequestMethod.POST)
-	public ResponseEntity<String> addUserRating(@RequestBody Map<String,Object> review){
+	public ResponseEntity<Map<String, String>> addUserRating(@RequestBody Map<String,Object> review){
 		boolean success=reviewService.createUserRating(review);
-		if(success) 
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		else
-			return new ResponseEntity<String>(FAILURE, HttpStatus.BAD_REQUEST);
+		if(success) { 
+			Map<String, String> response=new HashMap<String,String>();
+			response.put("msg",SUCCESS);
+			return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+		}
+		else {
+			Map<String, String> response=new HashMap<String,String>();
+			response.put("errorMsg",FAILURE);
+			return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+		}
+			
 	}
 
 }
