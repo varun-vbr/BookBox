@@ -60,16 +60,25 @@ public class UserActionController {
     }
     
     @RequestMapping(value="/playlists/create", method=RequestMethod.POST)
-    public ResponseEntity<String> createUserPlaylist(@RequestBody Map<String, Object> playlistDetails){
+    public ResponseEntity<Map<String, String>> createUserPlaylist(@RequestBody Map<String, Object> playlistDetails){
     	String playlistName=(String)playlistDetails.get("name");
     	int userId=(Integer)playlistDetails.get("userId");
     	if(playlistName!=null && userId != 0) {
-    		if(actionService.addPlayList(playlistName, userId))
-    			return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
-    		else
-    			return new ResponseEntity<String>(FAILURE,HttpStatus.BAD_REQUEST);
+    		boolean success=actionService.addPlayList(playlistName, userId);
+    		if(success) {
+        		Map<String, String> response=new HashMap<String,String>();
+        		response.put("msg",SUCCESS);
+        		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+        	}
+        	else {
+        		Map<String, String> response=new HashMap<String,String>();
+        		response.put("errorMsg",FAILURE);
+        		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+        	}
     	}
-    	return new ResponseEntity<String>(INPUT_MISSING,HttpStatus.BAD_REQUEST);
+    	Map<String, String> response=new HashMap<String,String>();
+		response.put("errorMsg",INPUT_MISSING);
+    	return new ResponseEntity<Map<String, String>>(response,HttpStatus.BAD_REQUEST);
     }
     
     @RequestMapping(value="/playlists/delete", method=RequestMethod.POST)
