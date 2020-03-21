@@ -232,6 +232,10 @@ public class UserAccountService {
         
     }
     
+    public List<CurrentBook> getAllReadingHistory(String username){
+    	return userDao.getUserReadingHistory(username);
+    }
+    
     public UserInfo getUserInfoForAnonymousLogin() {
     	UserInfo userInfo=new UserInfo();
     	

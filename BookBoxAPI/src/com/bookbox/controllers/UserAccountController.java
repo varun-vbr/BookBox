@@ -1,6 +1,7 @@
 package com.bookbox.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.bookbox.exceptions.IllegalLoginException;
 import com.bookbox.exceptions.DuplicateUserCreationException;
 import com.bookbox.exceptions.IllegalAccessException;
 import com.bookbox.exceptions.UserNotFoundException;
+import com.bookbox.models.CurrentBook;
 import com.bookbox.models.UserInfo;
 import com.bookbox.services.UserAccountService;
 
@@ -44,6 +46,12 @@ public class UserAccountController {
     		return new ResponseEntity<String>(FAILURE,HttpStatus.BAD_REQUEST);
     	}
 	}
+    @RequestMapping(value="/history/{username}", method=RequestMethod.GET)
+    public ResponseEntity getUserHistory( @PathVariable("username")String username) {
+    	List<CurrentBook> history= userService.getAllReadingHistory(username);
+    	return new ResponseEntity<List<CurrentBook>>(history,HttpStatus.OK);
+    	
+    }
    
     @RequestMapping(value="/anonymous", method=RequestMethod.GET)
     public ResponseEntity<UserInfo> getDetailsForAnonymousLogin(){
