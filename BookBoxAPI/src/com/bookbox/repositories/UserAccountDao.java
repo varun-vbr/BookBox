@@ -149,6 +149,32 @@ public class UserAccountDao {
 		return (List<PreferedCategory>)session.createQuery(queryForPreferredCategories).setString("username", username).list();
 	}
 	
+	public boolean addPreferredCategory(int userId, int categoryId) {
+		String queryForUser="from User where userId=:userId";
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		User user=(User)session.createQuery(queryForUser).setInteger("userId", userId).uniqueResult();
+		BookCategory category=this.getCategoryFromId(categoryId);
+		PreferedCategory newPC=new PreferedCategory();
+		newPC.setCategory(category);
+		newPC.setUser(user);
+		session.save(newPC);
+		session.getTransaction().commit();
+		return true;
+	}
+	
+	public boolean deletePreferredCategory(int userId, int categoryId) {
+		String queryForPreferredCategory="from PreferedCategory p where p.user.userId=:userId and p.category.categoryId=:categoryId";
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		PreferedCategory pfd=(PreferedCategory)session.createQuery(queryForPreferredCategory).setInteger("userId", userId).setInteger("categoryId", categoryId).uniqueResult();
+		pfd.getUser().getPreferredCategories().clear();
+		pfd=(PreferedCategory)session.merge(pfd);
+		session.delete(pfd);
+		session.getTransaction().commit();
+		return true;
+	}
+	
 	public List<BookCategory> getAllCategories(){
 		String hql="from BookCategory";
 		Session session=sessionFactory.getCurrentSession();
@@ -233,7 +259,7 @@ public class UserAccountDao {
 				user.setName((String)newDetails.get("name"));
 			}
 			if(newDetails.containsKey("email")) {
-				validateUserName("", (String)newDetails.get("email"));
+				//validateUserName("", (String)newDetails.get("email"));
 				user.setEmail((String)newDetails.get("email"));
 			}
 			if(newDetails.containsKey("cardNumber")) {

@@ -20,6 +20,7 @@ import com.bookbox.exceptions.DuplicateUserCreationException;
 import com.bookbox.exceptions.IllegalAccessException;
 import com.bookbox.exceptions.UserNotFoundException;
 import com.bookbox.models.CurrentBook;
+import com.bookbox.models.PreferedCategory;
 import com.bookbox.models.UserInfo;
 import com.bookbox.services.UserAccountService;
 
@@ -73,13 +74,49 @@ public class UserAccountController {
     	}
     }
     @RequestMapping(value="/update", method=RequestMethod.PUT)
-    public ResponseEntity<String> updateUserDetails(@RequestBody Map<String, Object> newDetails){
+    public ResponseEntity<Map<String, String>> updateUserDetails(@RequestBody Map<String, Object> newDetails){
     	boolean success=userService.updateUser(newDetails);
     	if(success) {
-    		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
     	}
     	else {
-    		return new ResponseEntity<String>(FAILURE, HttpStatus.BAD_REQUEST);
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+    	}
+    }
+    @RequestMapping(value="/preferredCategories/{username}", method=RequestMethod.GET)
+    public ResponseEntity<List<PreferedCategory>> getPreferredCategoryForUser(@PathVariable("username")String username){
+		return new ResponseEntity<List<PreferedCategory>>(userService.listPreferredCategories(username),HttpStatus.OK);
+    	
+    }
+    @RequestMapping(value="/addPfdCategory", method=RequestMethod.POST)
+    public ResponseEntity<Map<String,String>> addPreferredCategory(@RequestBody Map<String, Object> details){
+    	if(userService.addPreferredCategory(details)) {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+    	}
+    	else {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+    	}
+    }
+    
+    @RequestMapping(value="/removePfdCategory", method=RequestMethod.POST)
+    public ResponseEntity<Map<String,String>> removePreferredCategory(@RequestBody Map<String, Object> details){
+    	if(userService.deletePreferredCategory(details)) {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+    	}
+    	else {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     	}
     }
     @ExceptionHandler(UserNotFoundException.class) 

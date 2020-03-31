@@ -158,6 +158,24 @@ public class UserAccountService {
     	return popularBooksInPreferredCategories;
     }
     
+    public List<PreferedCategory> listPreferredCategories(String username){
+    	return userDao.getPreferredCategoriesForUser(username);
+    }
+    
+    public boolean addPreferredCategory(Map<String, Object> details){
+    	if(details.containsKey("userId") && details.containsKey("categoryId"))
+    		return userDao.addPreferredCategory((Integer)details.get("userId"),(Integer)details.get("categoryId"));
+    	else
+    		return false;
+    }
+    
+    public boolean deletePreferredCategory(Map<String, Object> details) {
+    	if(details.containsKey("userId") && details.containsKey("categoryId"))
+    		return userDao.deletePreferredCategory((Integer)details.get("userId"),(Integer)details.get("categoryId"));
+    	else
+    		return false;
+    }
+    
     public Map<BookCategory, List<Book>> getPopularBooksFromAllCategories(int rowCount){
          Map<BookCategory, List<Book>> booksByCategory=new HashMap<BookCategory, List<Book>>();
          for(BookCategory category:userDao.getAllCategories()) {
