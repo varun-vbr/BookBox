@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bookbox.models.Book;
 import com.bookbox.models.BookBoxConstants;
+import com.bookbox.models.CurrentBook;
 import com.bookbox.repositories.UserActionDao;
 
 @Service
@@ -18,6 +19,10 @@ public class UserActionService {
 	
 	public List<Book> getAllBooksInCategory(int categoryId){
 		return actionDao.getAllBooksForCategory(categoryId);
+	}
+	
+	public CurrentBook getCurrentBook(int bookId, int userId) {
+		return actionDao.getCurrentBook(bookId, userId);
 	}
 	
 	public boolean openBook(Map<String,Integer> currentRead){

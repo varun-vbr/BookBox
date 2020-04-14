@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.bookbox.exceptions.DuplicateBookInPlaylistException;
 import com.bookbox.exceptions.NoBooksFoundException;
 import com.bookbox.models.Book;
+import com.bookbox.models.CurrentBook;
 import com.bookbox.services.UserActionService;
 
 @Controller
@@ -37,21 +38,38 @@ public class UserActionController {
     	List<Book> books=actionService.getAllBooksInCategory(categoryId);
     	return new ResponseEntity<List<Book>>(books, HttpStatus.OK);
     }
+    @RequestMapping(value="currentBook/{bookId}/{userId}", method=RequestMethod.GET)
+    public ResponseEntity<CurrentBook> getCurrentBook(@PathVariable("bookId")int bookId, @PathVariable("userId")int userId){
+    	return new ResponseEntity<CurrentBook>(actionService.getCurrentBook(bookId, userId), HttpStatus.OK);
+    }
     @RequestMapping(value="/openBook", method=RequestMethod.POST)
-    public ResponseEntity<String> openBook(@RequestBody Map<String,Integer> currentRead){
+    public ResponseEntity<Map<String, String>> openBook(@RequestBody Map<String,Integer> currentRead){
     	boolean success=actionService.openBook(currentRead);
-    	if(success)
-    		return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
-    	else
-    		return new ResponseEntity<String>(FAILURE,HttpStatus.BAD_REQUEST);
+    	if(success) {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+    	}
+    	else {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+    	}
     }
     
     @RequestMapping(value="/recordProgress", method=RequestMethod.POST)
-    public ResponseEntity<String> recordReadingProgress(@RequestBody Map<String, Integer> currentRead){
-    	if(actionService.recordReadingProgress(currentRead))
-    		return new ResponseEntity<String>(SUCCESS,HttpStatus.OK);
-    	else
-    		return new ResponseEntity<String>(FAILURE,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> recordReadingProgress(@RequestBody Map<String, Integer> currentRead){
+    	boolean success=actionService.recordReadingProgress(currentRead);
+    	if(success) {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("msg",SUCCESS);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+    	}
+    	else {
+    		Map<String, String> response=new HashMap<String,String>();
+    		response.put("errorMsg",FAILURE);
+    		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
+    	}
     }
     
     @RequestMapping(value="/playlists/allUserPlaylists/{userId}/{userName}", method=RequestMethod.GET)

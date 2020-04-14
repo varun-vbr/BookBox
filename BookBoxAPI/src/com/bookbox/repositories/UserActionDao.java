@@ -41,6 +41,14 @@ public class UserActionDao {
 			throw new NoBooksFoundException();
 	}
 	
+	public CurrentBook getCurrentBook(int bookId, int userId) {
+		Session session=sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		CurrentBook currentBook=(CurrentBook) session.createQuery("from CurrentBook cb where cb.book.bookId=:bookId and cb.user.userId=:userId and cb.percentageCompleted<100").
+                setInteger("bookId", bookId).setInteger("userId", userId).uniqueResult();
+		return currentBook;
+	}
+	
 	public boolean setCurrentBook(Map<String,Integer> currentRead) {
 		Session session=sessionFactory.getCurrentSession();
 		session.beginTransaction();
@@ -60,8 +68,9 @@ public class UserActionDao {
 			CurrentBook cbook=new CurrentBook();
 			cbook.setBook(book);
 			cbook.setUser(user);
-			cbook.setCurrentPage(currentRead.get("currentPage"));
+			cbook.setCurrentPage(1);
 			cbook.setNumberOfPages(currentRead.get("numberOfPages"));
+			cbook.setPercentageCompleted(currentRead.get("percentageCompleted"));
 			cbook.setLastRead(currentTimestamp);
 			session.save(cbook);
 			session.getTransaction().commit();
